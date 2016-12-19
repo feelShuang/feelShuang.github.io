@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/04/28/iOS编程细节整理/index.html">
 <meta property="og:site_name" content="刘 爽">
 <meta property="og:description" content="关于iOS开发中遇到的一些小问题及其解决方法">
-<meta property="og:updated_time" content="2016-01-20T15:52:26.000Z">
+<meta property="og:updated_time" content="2016-12-19T09:04:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS编程细节整理">
 <meta name="twitter:description" content="关于iOS开发中遇到的一些小问题及其解决方法">
@@ -135,6 +135,16 @@
   
 
 
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?da961585154a0a9eb5cd80b0e9801a53";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -377,17 +387,18 @@
 
       
         <h4 id="关于iOS开发中遇到的一些小问题及其解决方法"><a href="#关于iOS开发中遇到的一些小问题及其解决方法" class="headerlink" title="关于iOS开发中遇到的一些小问题及其解决方法"></a>关于iOS开发中遇到的一些小问题及其解决方法</h4><a id="more"></a>
-<h4 id="自定义调试"><a href="#自定义调试" class="headerlink" title="自定义调试"></a>自定义调试</h4><pre><code>// ...表示宏定义的可变参数
-// __VA_ARGS__:表示函数里面的可变参数
-#ifdef DEBUG // 调试
+<h4 id="自定义调试"><a href="#自定义调试" class="headerlink" title="自定义调试"></a>自定义调试</h4><p>NSLog非常耗性能,如果程序发布了,还一大堆NSLog,用户用起来会很卡。 解决方式:自己写个Log,做处理,在发布的时候不打印,调试的时候才打印。</p>
+<pre><code>#ifdef DEBUG
 
-#define LSLog(...) NSLog(__VA_ARGS__)
+#define LSBaseLog(...) NSLog(__VA_ARGS__)
+#define LSFuncLog LSLog(@&quot;--%d,%s&quot;,__LINE__,__func__)
+#define LSLog(fmt,...) NSLog((@&quot; \n%s\n -line %d \n -&quot; fmt),__PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
-#else // 发布
+#else
 
-#define LSLog(...)
-
-#endif
+#define LSBaseLog(...)
+#define LSFuncLog
+#define LSLog(fmt,...)
 
 #endif
 </code></pre><h4 id="解决有的图片被渲染，显示不正常的问题"><a href="#解决有的图片被渲染，显示不正常的问题" class="headerlink" title="解决有的图片被渲染，显示不正常的问题"></a>解决有的图片被渲染，显示不正常的问题</h4><pre><code>//渲染
@@ -890,7 +901,7 @@ NSLocationWhenInUseUsageDescription//使用时允许
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
