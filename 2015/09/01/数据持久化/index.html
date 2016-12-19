@@ -1,0 +1,1152 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="数据持久化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="数据持久化的方式在iOS开发中有很多持久化方式：
+
+plist (属性列表)
+preference (偏好设置)
+write to file 辅助持久化：NSKeyedArchiver (归档)
+SQLite3 (数据库)
+CoreData">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据持久化">
+<meta property="og:url" content="http://yoursite.com/2015/09/01/数据持久化/index.html">
+<meta property="og:site_name" content="刘 爽">
+<meta property="og:description" content="数据持久化的方式在iOS开发中有很多持久化方式：
+
+plist (属性列表)
+preference (偏好设置)
+write to file 辅助持久化：NSKeyedArchiver (归档)
+SQLite3 (数据库)
+CoreData">
+<meta property="og:updated_time" content="2015-12-15T07:45:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据持久化">
+<meta name="twitter:description" content="数据持久化的方式在iOS开发中有很多持久化方式：
+
+plist (属性列表)
+preference (偏好设置)
+write to file 辅助持久化：NSKeyedArchiver (归档)
+SQLite3 (数据库)
+CoreData">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/09/01/数据持久化/"/>
+
+
+
+
+
+  <title> 数据持久化 | 刘 爽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">刘 爽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fdvvyy7PB-9jT2KHeYD_','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/01/数据持久化/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="刘爽">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="刘 爽">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="刘 爽" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据持久化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-01T09:02:48+08:00">
+                2015-09-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2015/09/01/数据持久化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/01/数据持久化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="数据持久化的方式"><a href="#数据持久化的方式" class="headerlink" title="数据持久化的方式"></a>数据持久化的方式</h2><p>在iOS开发中有很多持久化方式：</p>
+<ul>
+<li>plist (属性列表)</li>
+<li>preference (偏好设置)</li>
+<li>write to file 辅助持久化：NSKeyedArchiver (归档)</li>
+<li>SQLite3 (数据库)</li>
+<li>CoreData</li>
+</ul>
+<a id="more"></a>
+<h3 id="沙盒机制"><a href="#沙盒机制" class="headerlink" title="沙盒机制"></a>沙盒机制</h3><h4 id="沙盒文件夹路径："><a href="#沙盒文件夹路径：" class="headerlink" title="沙盒文件夹路径："></a>沙盒文件夹路径：</h4><pre><code>//获取沙盒主路径
+NSString *homePath = NSHomeDirectory();
+NSLog(@&quot;homePath = %@&quot;,homePath);
+</code></pre><h4 id="沙盒的目录结构："><a href="#沙盒的目录结构：" class="headerlink" title="沙盒的目录结构："></a>沙盒的目录结构：</h4><ul>
+<li>Documents</li>
+<li>Library</li>
+<li>Library/Caches</li>
+<li>Library/Cookies</li>
+<li>Library/Preference</li>
+<li>tmp</li>
+</ul>
+<h5 id="文件特性"><a href="#文件特性" class="headerlink" title="文件特性"></a>文件特性</h5><p>Documents:</p>
+<pre><code>//获取Documents: 同城用来存放应用程序需要持久化使用的关键数据，比如本地数据库等。iTunes在备份的时候会自动备份此文件夹
+NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO) objectAtIndex:0];
+NSLog(@&quot;documentPath = %@&quot;,documentPath);
+</code></pre><p>Library/Caches:</p>
+<pre><code>//获取Library/Caches: iTunes不会同步此文件夹，时和存储体积大，不需要备份的非重要数据。
+NSString *cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+NSLog(@&quot;cachePath = %@&quot;,cachePath);
+</code></pre><p>Library/Preference:</p>
+<pre><code>//Library/Preference: iTunes同步该应用时会同步此文件夹总的内容通常保存应用的设置信息
+</code></pre><p>tmp:</p>
+<pre><code>//tmp: 存放临时文件，应用程序结束后清除
+NSSting *tmpPath = NSTemporaryDirectory();
+NSLog(@&quot;tmpPath = %@&quot;,tmpPath);
+</code></pre><h3 id="plist文件"><a href="#plist文件" class="headerlink" title="plist文件"></a>plist文件</h3><p>plist文件是将一些特定的类，通过XML文件的方式保存在目录中</p>
+<p>可以被存储为plist文件的类举例：</p>
+<ul>
+<li>NSArray</li>
+<li>NSMutableArray</li>
+<li>NSDictionary</li>
+<li>NSMutableDictionary</li>
+<li>NSData</li>
+<li>NSMutableData</li>
+<li>NSString</li>
+<li>NSMutableString</li>
+<li>NSNumber</li>
+<li>NSDate</li>
+</ul>
+<p>存储步骤：</p>
+<pre><code>//字符串写入文件（NSString）
+NSString *incantation = @&quot;等闲变却故人心，却道故人心易变&quot;;
+
+//获得文件路径
+NSString *documentPath1 = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+NSString *fileName = [documentPath1 stringByAppendingString:@&quot;/纳兰容若.plist&quot;];
+
+NSString *path = NSHomeDirectory();
+path = [path stringByAppendingString:@&quot;/纳兰容若.plist&quot;];
+//或者 path = [path stringByAppendingPathComponent:@&quot;纳兰容若.plist&quot;];
+
+//将字符串写入文件
+[incantation writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+//从文件获取字符串
+NSString *resultString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+</code></pre><p>存储时使用writeToFile: atomically:方法。 其中atomically表示是否需要先写入一个辅助文件，再把辅助文件拷贝到目标文件地址。这是更安全的写入文件方法，一般都写YES</p>
+<p>读取时使用 类型+WithContentsOfFile:方法。例如：arrayWithContentsOfFile:</p>
+<h3 id="Preference"><a href="#Preference" class="headerlink" title="Preference:"></a>Preference:</h3><pre><code>// preference
+// 获得NSUserDefults文件
+NSUserDefaults *userDefult = [NSUserDefaults standardUserDefaults];
+
+// 向文件中写入内容
+[userDefult setObject:@&quot;aaa&quot; forKey:@&quot;a&quot;];
+[userDefult setBool:YES forKey:@&quot;sex&quot;];
+[userDefult setInteger:21 forKey:@&quot;age&quot;];
+
+// 立即同步
+[userDefult synchronize];
+
+// 读取文件
+NSString *name = [userDefult objectForKey:@&quot;a&quot;];
+BOOL sex = [userDefult boolForKey:@&quot;sex&quot;];
+NSInteger age = [userDefult integerForKey:@&quot;age&quot;];
+
+NSLog(@&quot;name = %@ sex = %d age = %ld&quot;, name, sex, age);
+</code></pre><p><strong>注意</strong> </p>
+<p>偏好设置是专门用来保存应用程序的配置信息的，一般不要在偏好设置中保存其他数据。</p>
+<p>如果没有调用synchronize方法，系统会根据I/O情况不定时刻地保存到文件中。所以如果需要立即写入文件的就必须调用synchronize方法。</p>
+<p>偏好设置会将所有数据保存到同一个文件中。即preference目录下的一个以此应用包名来命名的plist文件。</p>
+<h3 id="NSKeyedArchiver"><a href="#NSKeyedArchiver" class="headerlink" title="NSKeyedArchiver"></a>NSKeyedArchiver</h3><p>在iOS中只要遵循了NSCoding协议的对象都可以通过它实现序列化。</p>
+<h4 id="1-遵循NSCoding协议"><a href="#1-遵循NSCoding协议" class="headerlink" title="1.遵循NSCoding协议"></a>1.遵循NSCoding协议</h4><p>NSCoding协议声明了两个方法，这两个方法都是必须实现的。</p>
+<p>一个用来说明如何将对象编码到归档中</p>
+<p>另一个说明如何进行解档来获取一个新对象。</p>
+<h5 id="遵循协议和设置属性"><a href="#遵循协议和设置属性" class="headerlink" title="遵循协议和设置属性"></a>遵循协议和设置属性</h5><pre><code>#import &lt;Foundation/Foundation.h&gt;
+
+@interface singleVIP : NSObject&lt;NSCoding&gt;// 遵循NSCoding协议
+
+@property (nonatomic,strong)NSString *name;
+@property (nonatomic,strong)NSString *gender;
+
+- (void)archiveObject；
+
+@end
+</code></pre><h5 id="实现归档解档协议"><a href="#实现归档解档协议" class="headerlink" title="实现归档解档协议"></a>实现归档解档协议</h5><pre><code>#import &quot;singleVIP.h&quot;
+
+@implementation singleVIP
+
+//编码
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_name forKey:@&quot;name&quot;];
+    [aCoder encodeObject:_gender forKey:@&quot;gender&quot;];
+}
+
+//解码
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        _name = [aDecoder decodeObjectForKey:@&quot;name&quot;];
+        _gender = [aDecoder decodeObjectForKey:@&quot;gender&quot;];
+    }
+    return self;
+}
+
+@end
+</code></pre><p><strong>注意</strong></p>
+<p>如果需要归档的类是某个自定义类的子类时，就需要在归档和解档之前先实现父类的归档和解档方法。即 [super encodeWithCoder:aCoder] 和 [super initWithCoder:aDecoder] 方法;</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><pre><code>- (void)archiveObject {
+
+//创建对象
+singleVIP *person = [singleVIP new];
+person.name = @&quot;Misceller&quot;;
+person.gender = @&quot;male&quot;;
+
+//获取路径
+NSString *path = NSHomeDirectory();
+path = [path stringByAppendingString:@&quot;/person.txt&quot;];
+
+NSLog(@&quot;%@&quot;,path);
+
+//创建可变Data，用来存放归档数据
+NSMutableData *mutData = [[NSMutableData alloc] initWithCapacity:30];
+
+//创建归档对象
+NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:mutData];
+
+//归档 由归档对象完成
+[archiver encodeObject:person forKey:@&quot;person&quot;];
+
+//完成归档
+[archiver finishEncoding];
+
+//写入文件
+[mutData writeToFile:path atomically:YES];
+
+//使用Data对象获取数据
+NSData *data = [NSData dataWithContentsOfFile:path];
+
+//创建反归档对象
+NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+
+//反归档
+singleVIP *person1 = [unarchiver decodeObjectForKey:@&quot;person&quot;];
+
+//完成反归档
+[unarchiver finishDecoding];
+NSLog(@&quot;%@,%@&quot;,person1.name,person1.gender);
+
+}
+</code></pre><h3 id="SQLite3"><a href="#SQLite3" class="headerlink" title="SQLite3"></a>SQLite3</h3><p>之前的所有存储方法，都是覆盖存储。如果想要增加一条数据就必须把整个文件读出来，然后修改数据后再把整个内容覆盖写入文件。所以它们都不适合存储大量的内容。</p>
+<h4 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h4><p>表面上SQLite将数据分为以下几种类型：</p>
+<p>integer : 整数</p>
+<p>real : 实数（浮点数）</p>
+<p>text : 文本字符串</p>
+<p>blob : 二进制数据，比如文件，图片之类的</p>
+<p>实际上SQLite是无类型的。即不管你在创表时指定的字段类型是什么，存储是依然可以存储任意类型的数据。而且在创表时也可以不指定字段类型。SQLite之所以什么类型就是为了良好的编程规范和方便开发人员交流，所以平时在使用时最好设置正确的字段类型！主键必须设置成integer</p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>准备工作就是导入依赖库啦，在iOS中要使用SQLite3，需要添加库文件：libsqlite3.dylib并导入主头文件，这是一个C语言的库，所以直接使用SQLite3还是比较麻烦的。</p>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><p>定义</p>
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;sqlite3.h&gt;
+@class Student;
+@interface DBManager : NSObject
+
++ (instancetype)shareManager;
+
+//打开数据库
+- (void)openDB;
+
+//关闭数据库
+- (void)closeDB;
+
+//创建表
+- (void)createTable;
+
+//增
+- (void)insertStudent:(Student *)student;
+
+//删
+- (void)deleteStudentWithName:(NSString *)name;
+
+//改
+- (void)updateStudentAge:(NSInteger)age withName:(NSString *)name;
+
+//查
+- (NSArray *)selectAllStudents;
+
+//根据条件查询某个人
+- (NSArray *)selectStudentWithName:(NSString *)name;
+
+@end
+</code></pre><p>实现</p>
+<pre><code>#import &quot;DBManager.h&quot;
+#import &quot;Student.h&quot;
+@implementation DBManager
+
+//伪单例 静态方法
++ (instancetype)shareManager {
+
+    static DBManager *dbManager = nil;
+
+    if (nil == dbManager) {
+        dbManager = [[DBManager alloc] init];
+    }
+    return dbManager;
+
+}
+
+static sqlite3 *db = nil;
+
+//打开数据库
+- (void)openDB {
+
+    if (nil != db) {
+        return;
+    }
+
+    //创建路径
+    NSString *path = NSHomeDirectory();
+    path = [path stringByAppendingString:@&quot;/student.sqlite&quot;];
+
+    //打开数据库
+    int result = sqlite3_open([path UTF8String], &amp;db);
+
+    if (result == SQLITE_OK) {//SQLITE_OK代码是否执行成功
+        NSLog(@&quot;😄嘻嘻，打开成功了。。。。&quot;);
+    } else {
+           NSLog(@&quot;打开失败了，错误操作数为%d&quot;,result);
+    }
+}
+
+//关闭数据库
+- (void)closeDB {
+
+    int result = sqlite3_close(db);
+    if (SQLITE_OK == result) {
+        db = nil;
+        NSLog(@&quot;😄关闭成功&quot;);
+    } else {
+        NSLog(@&quot;关闭失败了&quot;);
+    }
+}
+
+//创建表
+- (void)createTable {
+    //准备sql语句
+    NSString *createString = @&quot;CREATE TABLE IF NOT EXISTS &apos;student&apos; (&apos;number&apos; INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, &apos;name&apos; TEXT NOT NULL, &apos;age&apos; INTEGER NOT NULL, &apos;gender&apos; TEXT NOT NULL DEFAULT 男)&quot;;
+
+    int result = sqlite3_exec(db, createString.UTF8String, NULL, NULL, NULL);
+
+    if (SQLITE_OK == result) {
+           NSLog(@&quot;😄创建表成功&quot;);
+    } else {
+        NSLog(@&quot;***，不成功,错误操作数是%d&quot;,result);
+    }
+
+}
+
+//增
+- (void)insertStudent:(Student *)student {
+
+    //准备sql语句
+    NSString *insertString = [NSString stringWithFormat:@&quot;INSERT INTO &apos;student&apos; (name,age,gender) VALUES (&apos;%@&apos;,&apos;%ld&apos;,&apos;%@&apos;)&quot;,student.name,student.age,student.gender];
+
+    int result = sqlite3_exec(db, insertString.UTF8String, NULL, NULL, NULL);
+    if (SQLITE_OK == result) {
+        NSLog(@&quot;😄，插入数据成功了&quot;);
+    } else {
+        NSLog(@&quot;插入失败,错误操作数%d&quot;,result);
+    }
+
+
+}
+
+//删
+- (void)deleteStudentWithName:(NSString *)name {
+
+    //准备sql语句
+    NSString *deleteString = [NSString stringWithFormat:@&quot;DELETE FROM &apos;student&apos; WHERE name = &apos;%@&apos;&quot;,name];
+
+    int result = sqlite3_exec(db, deleteString.UTF8String, NULL, NULL, NULL);
+    if (SQLITE_OK == result) {
+        NSLog(@&quot;😄删除成功了&quot;);
+    } else {
+        NSLog(@&quot;操作失败数是%d&quot;,result);
+    }
+
+}
+
+
+//改
+- (void)updateStudentAge:(NSInteger)age withName:(NSString *)name {
+
+    //准备sql语句
+    NSString *updateString = [NSString stringWithFormat:@&quot;UPDATE &apos;student&apos; SET age = &apos;%ld&apos; WHERE name = &apos;%@&apos;&quot;,age,name];
+
+    int result = sqlite3_exec(db, updateString.UTF8String, NULL, NULL, NULL);
+    if (SQLITE_OK == result) {
+        NSLog(@&quot;😄更改成功&quot;);
+    } else {
+        NSLog(@&quot;操作失败数是：%d&quot;,result);
+    }
+
+}
+
+//查
+- (NSArray *)selectAllStudents {
+
+    //准备数组
+    NSMutableArray *array = nil;
+    //准备伴随指针
+    sqlite3_stmt *stmt = nil;
+    //准备SQL语句
+    NSString *selectString = @&quot;SELECT * FROM student&quot;;
+    //-1代表无穷大
+    int result = sqlite3_prepare_v2(db, selectString.UTF8String, -1, &amp;stmt, NULL);
+    if (SQLITE_OK == result) {
+
+            array = [[NSMutableArray alloc] initWithCapacity:20];
+            while (sqlite3_step(stmt) == SQLITE_ROW) {
+            //number,name,age,gender
+            Student *student = [Student new];
+            student.number = sqlite3_column_int(stmt, 0);
+            //根据字段查询的字符串需要强转为const char *类型后，再转化成OC字符串
+            student.name = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+            student.age = sqlite3_column_int(stmt, 2);
+            student.gender = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(stmt, 3)];
+            //添加到数组
+            [array addObject:student];
+        }
+
+    } else {
+        NSLog(@&quot;查询失败,操作数为：%d&quot;,result);
+    }
+
+    for (Student *stu in array) {
+        NSLog(@&quot;%@&quot;,stu);
+    }
+
+    //释放伴随指针
+    sqlite3_finalize(stmt);
+    return array;
+
+}
+
+
+//根据条件查询某个人
+- (NSArray *)selectStudentWithName:(NSString *)name {
+
+    //绑定
+    NSString *sqlWord = @&quot;SELECT *FROM student WHERE name = ?&quot;;
+    NSMutableArray *array = nil;
+    sqlite3_stmt *stmt = nil;
+    //等于nil的 属于内存挂起要修改它的值必须传进它的地址
+    int result = sqlite3_prepare(db, sqlWord.UTF8String, -1, &amp;stmt, NULL);
+    if (SQLITE_OK == result) {
+        while (SQLITE_ROW == sqlite3_step(stmt)) {
+            array = [[NSMutableArray alloc] initWithCapacity:20];
+            sqlite3_bind_text(stmt, 1, name.UTF8String, -1, NULL);
+            // 1 指的是绑定的第几个问号,name.UTF8String绑定的属性
+            Student *stu = [Student new];
+            stu.number = sqlite3_column_int64(stmt, 0);
+            //int64 指的是在64位机器上运行的
+            stu.name = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 1)];
+            stu.age = sqlite3_column_int64(stmt, 2);
+            stu.gender = [NSString stringWithUTF8String:(const char *)sqlite3_column_text(stmt, 3)];
+            [array addObject:stu];
+        }
+    } else {
+        NSLog(@&quot;&quot;);
+    }
+
+    //释放伴随指针
+    sqlite3_finalize(stmt);
+    return array;
+
+}
+
+
+@end
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据持久化/" rel="tag"># 数据持久化</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/23/Scoket编程/" rel="next" title="Scoket编程">
+                <i class="fa fa-chevron-left"></i> Scoket编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/03/FMDB数据库第三方框架/" rel="prev" title="FMDB数据库第三方框架">
+                FMDB数据库第三方框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/09/01/数据持久化/"
+           data-title="数据持久化" data-url="http://yoursite.com/2015/09/01/数据持久化/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg"
+               alt="刘爽" />
+          <p class="site-author-name" itemprop="name">刘爽</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.cocoachina.com" title="CocoaChina" target="_blank">CocoaChina</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" title="Git教程" target="_blank">Git教程</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.callmewhy.com" title="Why" target="_blank">Why</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据持久化的方式"><span class="nav-number">1.</span> <span class="nav-text">数据持久化的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#沙盒机制"><span class="nav-number">1.1.</span> <span class="nav-text">沙盒机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#沙盒文件夹路径："><span class="nav-number">1.1.1.</span> <span class="nav-text">沙盒文件夹路径：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#沙盒的目录结构："><span class="nav-number">1.1.2.</span> <span class="nav-text">沙盒的目录结构：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件特性"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">文件特性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plist文件"><span class="nav-number">1.2.</span> <span class="nav-text">plist文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preference"><span class="nav-number">1.3.</span> <span class="nav-text">Preference:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NSKeyedArchiver"><span class="nav-number">1.4.</span> <span class="nav-text">NSKeyedArchiver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-遵循NSCoding协议"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.遵循NSCoding协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#遵循协议和设置属性"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">遵循协议和设置属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实现归档解档协议"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">实现归档解档协议</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">1.4.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQLite3"><span class="nav-number">1.5.</span> <span class="nav-text">SQLite3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字段类型"><span class="nav-number">1.5.1.</span> <span class="nav-text">字段类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">1.5.2.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘爽</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feelShuang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

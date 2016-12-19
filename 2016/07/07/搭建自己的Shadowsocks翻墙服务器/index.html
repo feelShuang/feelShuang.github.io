@@ -1,0 +1,781 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="最初接触Shadowsocks是因为我以前用的免费的翻墙工具lantern最近不能用这让我很郁闷，然后同事（我心目中的大牛啊）给我推荐了这个软件PS:虽说这个是收费的，但是想想免费的lantern这么的受限制。狠狠心就买了一台服务器，其实算下来还是挺划算的。因为购买的服务器只用来搭建Shadowsocks翻墙服务所以就买了个最便宜的。一年只有10$！！算下来还挺划算的😄😄😄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建自己的Shadowsocks翻墙服务器">
+<meta property="og:url" content="http://yoursite.com/2016/07/07/搭建自己的Shadowsocks翻墙服务器/index.html">
+<meta property="og:site_name" content="刘 爽">
+<meta property="og:description" content="最初接触Shadowsocks是因为我以前用的免费的翻墙工具lantern最近不能用这让我很郁闷，然后同事（我心目中的大牛啊）给我推荐了这个软件PS:虽说这个是收费的，但是想想免费的lantern这么的受限制。狠狠心就买了一台服务器，其实算下来还是挺划算的。因为购买的服务器只用来搭建Shadowsocks翻墙服务所以就买了个最便宜的。一年只有10$！！算下来还挺划算的😄😄😄">
+<meta property="og:updated_time" content="2016-08-22T10:31:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建自己的Shadowsocks翻墙服务器">
+<meta name="twitter:description" content="最初接触Shadowsocks是因为我以前用的免费的翻墙工具lantern最近不能用这让我很郁闷，然后同事（我心目中的大牛啊）给我推荐了这个软件PS:虽说这个是收费的，但是想想免费的lantern这么的受限制。狠狠心就买了一台服务器，其实算下来还是挺划算的。因为购买的服务器只用来搭建Shadowsocks翻墙服务所以就买了个最便宜的。一年只有10$！！算下来还挺划算的😄😄😄">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/07/搭建自己的Shadowsocks翻墙服务器/"/>
+
+
+
+
+
+  <title> 搭建自己的Shadowsocks翻墙服务器 | 刘 爽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">刘 爽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fdvvyy7PB-9jT2KHeYD_','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/搭建自己的Shadowsocks翻墙服务器/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="刘爽">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="刘 爽">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="刘 爽" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                搭建自己的Shadowsocks翻墙服务器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-07T11:07:47+08:00">
+                2016-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术‘片’/" itemprop="url" rel="index">
+                    <span itemprop="name">技术‘片’</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/07/07/搭建自己的Shadowsocks翻墙服务器/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/搭建自己的Shadowsocks翻墙服务器/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最初接触Shadowsocks是因为我以前用的免费的翻墙工具lantern最近不能用这让我很郁闷，然后同事（我心目中的大牛啊）给我推荐了这个软件PS:虽说这个是收费的，但是想想免费的lantern这么的受限制。狠狠心就买了一台服务器，其实算下来还是挺划算的。因为购买的服务器只用来搭建Shadowsocks翻墙服务所以就买了个最便宜的。一年只有10$！！算下来还挺划算的😄😄😄<br><a id="more"></a></p>
+<h3 id="搭建VPS远程服务器"><a href="#搭建VPS远程服务器" class="headerlink" title="搭建VPS远程服务器"></a>搭建VPS远程服务器</h3><p>想要使用Shadowsocks翻墙，首先我们就需要购买一台远程主机，用来搭建Shadowsocks服务我选择购买的网站已贴出（仅供参考~付款时需要用到Visia/MasterCard），你也可以到网上搜索主流的远程主机服务商。</p>
+<h4 id="购买VPS远程主机"><a href="#购买VPS远程主机" class="headerlink" title="购买VPS远程主机"></a>购买VPS远程主机</h4><p>购买教程便不再详细介绍，这个和某宝某东一个样，选好商品付款就可以了~<br><a href="https://www.alpharacks.com" target="_blank" rel="external">带你飞到哪美丽的墙外边:https://www.alpharacks.com</a></p>
+<h4 id="搭建远程服务器shadowsocks"><a href="#搭建远程服务器shadowsocks" class="headerlink" title="搭建远程服务器shadowsocks"></a>搭建远程服务器shadowsocks</h4><ul>
+<li><p>远程登录VPS<br>  Mac OS X 或者Linux下直接在终端中输入下边的命令，连接后直接输入你的登录密码即可<br>  在windows系统下需要专门的客户端来SSH登录VPS。在<a href="http://www.netsarang.com/download/down_form.html?code=522&amp;utm_source=textarea.com&amp;utm_medium=textarea.com&amp;utm_campaign=article" target="_blank" rel="external">xShell</a>官网  下载xShell。</p>
+<pre><code>ssh root@your_VPS_ipAddress
+</code></pre></li>
+<li><p>搭建Shadowsocks远程服务<br>  <strong>安装</strong><br>  Debian / Ubuntu:</p>
+<pre><code>apt-get install python-pip
+pip install shadowsocks
+</code></pre><p>  CentOS:</p>
+<pre><code>yum install python-setuptools &amp;&amp; easy_install pip
+pip install shadowsocks
+</code></pre><p>  <strong>使用</strong>  </p>
+<p>  在这个路径下<code>/etc/shadowsocks.json</code>创建配置文件 </p>
+<pre><code>{
+    &quot;server&quot;:&quot;my_server_ip&quot;,
+    &quot;server_port&quot;:8388,
+    &quot;local_address&quot;: &quot;127.0.0.1&quot;,
+    &quot;local_port&quot;:1080,
+    &quot;password&quot;:&quot;mypassword&quot;,
+    &quot;timeout&quot;:300,
+    &quot;method&quot;:&quot;aes-256-cfb&quot;,
+    &quot;fast_open&quot;: false
+}
+</code></pre><p>  字段说明</p>
+<p>  | Name          | Explanation                     |<br>  | ————- |———————————|<br>  | server        | the address your server listens |<br>  | server_port   | server_port                     |<br>  | local_address | the address your local listens  |<br>  | local_port    | local_port                      |<br>  | password      | password used for encryption    |<br>  | timeout       | in seconds                      |<br>  | method        | default: “aes-256-cfb”, see Encryption  |<br>  | fast_open     | use TCP_FASTOPEN, true / false  |<br>  | workers       | number of workers, available on Unix/Linux |</p>
+<p>  运行</p>
+<p>  在前台运行:</p>
+<pre><code>ssserver -c /etc/shadowsocks.json
+</code></pre><p>  在后台运行:</p>
+<pre><code>ssserver -c /etc/shadowsocks.json -d start
+ssserver -c /etc/shadowsocks.json -d stop
+</code></pre></li>
+</ul>
+<h3 id="连接远程服务器"><a href="#连接远程服务器" class="headerlink" title="连接远程服务器"></a>连接远程服务器</h3><h4 id="安装shadowsocks客户端"><a href="#安装shadowsocks客户端" class="headerlink" title="安装shadowsocks客户端"></a>安装shadowsocks客户端</h4><p><strong>下载</strong><br><a href="https://github.com/shadowsocks/shadowsocks-iOS/releases" target="_blank" rel="external">shadowsocks客户端下载地址</a>  </p>
+<p><strong>基本使用</strong>  </p>
+<ol>
+<li>解压后移动到合适目录下，然后启动。  </li>
+<li>如果弹出系统安全提示，请选「允许」。  </li>
+<li>Shadowsocks 会自动设置为全局 PAC 代理，Chrome、Safari、Twitter 都可以正常使用了。</li>
+<li>如果你开启了其它翻墙工具，请先将它们关闭。如果你使用了 Chrome 扩展程序 SwitchySharp，请把它的模式设置为「使用系统代理设置」。</li>
+<li>启动后可以在菜单栏右边找到 Shadowsocks 图标。</li>
+</ol>
+<p><strong>高级使用</strong>  </p>
+<ol>
+<li>如果你不想用全局 PAC 代理，想配合 <a href="http://switchysharp.com/install.html" target="_blank" rel="external">SwitchySharp 等插件</a>使用，可在菜单栏图标里点关闭 Shadowsocks。关闭后代理仍会运行在 127.0.0.1:1080 上，代理类型为 SOCKS v5。之所以不叫关闭 PAC，因为很多人不懂什么是 PAC。写关闭 Shadowsocks 更容易理解。</li>
+<li>默认使用公共服务器，可以在菜单栏图标里配置自定义服务器。</li>
+<li>切换服务器后，因为 Chrome 保持长连接，可能需要重启浏览器才能生效。也可以重启 ShadowsocksX 来强制 Chrome 重新连接。</li>
+<li>可以在菜单里点 编辑 PAC 来修改 PAC 文件，文件保存后会自动通知浏览器重新加载。推荐用 Xcode 等代码编辑器来编辑。如果用系统自带的文本编辑器，引号可能自动半角变全角，需要撤销一下回到半角。</li>
+<li>可以在菜单栏图标里打开控制台查看日志，其中 ShadowsocksX: 开头的是 Shadowsocks 的日志。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/07/隐藏UITableView多余的分割线/" rel="next" title="隐藏UITableView多余的分割线">
+                <i class="fa fa-chevron-left"></i> 隐藏UITableView多余的分割线
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/20/百度地图使用-自定义大头针/" rel="prev" title="百度地图使用-自定义大头针">
+                百度地图使用-自定义大头针 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/07/搭建自己的Shadowsocks翻墙服务器/"
+           data-title="搭建自己的Shadowsocks翻墙服务器" data-url="http://yoursite.com/2016/07/07/搭建自己的Shadowsocks翻墙服务器/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg"
+               alt="刘爽" />
+          <p class="site-author-name" itemprop="name">刘爽</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.cocoachina.com" title="CocoaChina" target="_blank">CocoaChina</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" title="Git教程" target="_blank">Git教程</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.callmewhy.com" title="Why" target="_blank">Why</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建VPS远程服务器"><span class="nav-number">1.</span> <span class="nav-text">搭建VPS远程服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#购买VPS远程主机"><span class="nav-number">1.1.</span> <span class="nav-text">购买VPS远程主机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#搭建远程服务器shadowsocks"><span class="nav-number">1.2.</span> <span class="nav-text">搭建远程服务器shadowsocks</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接远程服务器"><span class="nav-number">2.</span> <span class="nav-text">连接远程服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装shadowsocks客户端"><span class="nav-number">2.1.</span> <span class="nav-text">安装shadowsocks客户端</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘爽</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feelShuang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

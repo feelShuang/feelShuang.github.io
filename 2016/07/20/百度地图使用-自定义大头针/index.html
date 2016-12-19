@@ -1,0 +1,865 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Map," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="我们可以通过BMKPointAnnotation创建一个marker(大头针)对象然后对这个marker的coordinate属性赋值，这个对象还有一个title和subTitle属性，设置了这两个属性就会有气泡view了。这里我建议在自己项目中自定义BMKPointAnnotation可以自己添加一些属性和方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="百度地图使用-自定义大头针">
+<meta property="og:url" content="http://yoursite.com/2016/07/20/百度地图使用-自定义大头针/index.html">
+<meta property="og:site_name" content="刘 爽">
+<meta property="og:description" content="我们可以通过BMKPointAnnotation创建一个marker(大头针)对象然后对这个marker的coordinate属性赋值，这个对象还有一个title和subTitle属性，设置了这两个属性就会有气泡view了。这里我建议在自己项目中自定义BMKPointAnnotation可以自己添加一些属性和方法。">
+<meta property="og:image" content="http://7xrz9m.com1.z0.glb.clouddn.com/myAnnotation.png">
+<meta property="og:updated_time" content="2016-08-22T10:31:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="百度地图使用-自定义大头针">
+<meta name="twitter:description" content="我们可以通过BMKPointAnnotation创建一个marker(大头针)对象然后对这个marker的coordinate属性赋值，这个对象还有一个title和subTitle属性，设置了这两个属性就会有气泡view了。这里我建议在自己项目中自定义BMKPointAnnotation可以自己添加一些属性和方法。">
+<meta name="twitter:image" content="http://7xrz9m.com1.z0.glb.clouddn.com/myAnnotation.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/20/百度地图使用-自定义大头针/"/>
+
+
+
+
+
+  <title> 百度地图使用-自定义大头针 | 刘 爽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">刘 爽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fdvvyy7PB-9jT2KHeYD_','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/百度地图使用-自定义大头针/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="刘爽">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="刘 爽">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="刘 爽" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                百度地图使用-自定义大头针
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-20T17:11:31+08:00">
+                2016-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/07/20/百度地图使用-自定义大头针/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/20/百度地图使用-自定义大头针/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们可以通过BMKPointAnnotation创建一个marker(大头针)对象然后对这个marker的coordinate属性赋值，这个对象还有一个title和subTitle属性，设置了这两个属性就会有气泡view了。这里我建议在自己项目中自定义BMKPointAnnotation可以自己添加一些属性和方法。</p>
+<p><img src="http://7xrz9m.com1.z0.glb.clouddn.com/myAnnotation.png" alt=""><br><a id="more"></a><br>（我的项目中有两种状态，一种是个体，一种是聚合，我的聚合状态并没有采用overlayView，而是直接定义的大头针这仅是我个人的做法~）</p>
+<p><strong>地图区域改变完成后会调用此接口</strong></p>
+<pre><code>/** 地图区域改变完成后会调用此接口 */
+- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+
+       // 2. 发送请求
+    __weak typeof(self)weakSelf = self;
+    [LSHTTPTool ls_POST:kAllEnterpriseDataURL params:params success:^(id responseObject) {
+
+        // 清除地图上的大头针
+        NSArray* array = [NSArray arrayWithArray:self.mapView.annotations];
+        [self.mapView removeAnnotations:array];
+
+        // 保存当前地图级别
+        _mapLevel = areaLevel;
+
+        NSMutableArray *dataArr = [LSEnterprise mj_objectArrayWithKeyValuesArray:responseObject[@&quot;data&quot;]];
+        LSLog(@&quot;%lu&quot;,(unsigned long)dataArr.count);
+        NSMutableArray *annotations = [NSMutableArray array];
+        for (LSEnterprise *enterprise in dataArr) {
+            if (areaLevel == 6) {  // 添加普通大头针
+                LSPointAnnotation *pointAnnotation = [[LSPointAnnotation alloc] init];
+                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(0, 0);
+
+                coordinate = CLLocationCoordinate2DMake([enterprise.lat doubleValue], [enterprise.lng doubleValue]);
+                pointAnnotation.enterprise = enterprise;
+                pointAnnotation.coordinate = coordinate;
+                pointAnnotation.title = [NSString stringWithFormat:@&quot;%lu&quot;,(unsigned long)enterprise.count];
+                [annotations addObject:pointAnnotation];
+            } else {   // 添加聚合ovl
+                LSPloymerAnnotation *ploymerAnnotation = [[LSPloymerAnnotation alloc] init];
+                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([enterprise.lat doubleValue], [enterprise.lng doubleValue]);
+                   ploymerAnnotation.coordinate = coordinate;
+                ploymerAnnotation.title = [NSString stringWithFormat:@&quot;%lu&quot;,(unsigned long)enterprise.count];
+                [annotations addObject:ploymerAnnotation];
+            }
+
+        }
+        [weakSelf.dataArr addObjectsFromArray:dataArr];
+
+        [weakSelf.mapView addAnnotations:annotations];
+
+    } failure:^(NSError *error) {
+
+    }];
+}
+</code></pre><p>我们在地图上添加完成标注后，可以通过代理方法设置marker的view了，这个方法的理解我们可以结合tableView的代理方法学习  </p>
+<p><strong>根据anntation生成对应的View</strong></p>
+<pre><code>/** 地图区域改变完成后会调用此接口 */
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id &lt;BMKAnnotation&gt;)annotation {
+    // 普通annotation
+    if ([annotation isKindOfClass:[LSPointAnnotation class]]) {
+        LSPointAnnotationView *annotationView = nil;
+        if (annotationView == nil) {
+            annotationView = [[LSPointAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:NSStringFromClass([LSPointAnnotationView class])];
+        }
+
+        LSPointAnnotation *anno = (LSPointAnnotation *)annotation;
+        annotationView.enterprise = anno.enterprise;
+        annotationView.titleStr = annotation.title;
+        annotationView.canShowCallout = NO;
+
+        return annotationView;
+    }
+
+    // 聚合标记
+    LSPloymerAnnotationView *annotationView = nil;
+    if (annotationView == nil) {
+        annotationView = [[LSPloymerAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:NSStringFromClass([LSPloymerAnnotation class])];
+    }
+
+    annotationView.img = [UIImage imageNamed:[self getImgName]];
+    annotationView.titleStr = annotation.title;
+    annotationView.canShowCallout = NO;
+
+    return annotationView;
+}
+</code></pre><p>贴上我自定义的大头针View</p>
+<p>自定义大头针View.h</p>
+<pre><code>#import &lt;BaiduMapAPI_Map/BMKMapComponent.h&gt;
+
+@interface LSPointAnnotationView : BMKAnnotationView
+
+/** 图片 */
+@property (nonatomic, strong) UIImage *img;
+
+/** title */
+@property (nonatomic, copy) NSString *titleStr;
+
+/** 用来保存当前标记的数据的模型 */
+@property (nonatomic, strong) LSEnterprise *enterprise;
+
+@end
+</code></pre><p>自定义大头针View.m</p>
+<pre><code>#import &quot;LSPointAnnotationView.h&quot;
+
+@interface LSPointAnnotationView ()
+
+/** annotation图片 */
+@property (nonatomic, strong) UIImageView *annotationImgView;
+
+/** titleLabel */
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@end
+
+@implementation LSPointAnnotationView
+
+- (id)initWithAnnotation:(id&lt;BMKAnnotation&gt;)annotation reuseIdentifier:(NSString *)reuseIdentifier {
+self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if (self) {
+
+        // 添加所有子控件
+        [self addAllSubViews];
+    }
+    return self;
+}
+
+- (void)addAllSubViews {
+
+    // 0. 设置大头针基本属性
+    [self setBounds:CGRectMake(0.f, 0.f, 32.f, 32.f)];
+    [self setBackgroundColor:[UIColor clearColor]];
+
+    // 1. 添加annotationImgView
+    _annotationImgView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _annotationImgView.contentMode = UIViewContentModeCenter;
+    [self addSubview:_annotationImgView];
+
+    // 2. 添加titleLabel
+    _titleLabel = [[UILabel alloc] init];
+    _titleLabel.font = [UIFont systemFontOfSize:11];
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:_titleLabel];
+}
+
+- (void)setImg:(UIImage *)img {
+
+    _img = img;
+    _annotationImgView.image = img;
+}
+
+- (void)setTitleStr:(NSString *)titleStr {
+
+    _titleStr = titleStr;
+    _titleLabel.text = titleStr;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+
+    self.titleLabel.frame = CGRectMake(0, 3, CGRectGetWidth(self.annotationImgView.frame), CGRectGetHeight(self.annotationImgView.frame) * 0.6);
+}
+
+@end
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Map/" rel="tag"># Map</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/07/搭建自己的Shadowsocks翻墙服务器/" rel="next" title="搭建自己的Shadowsocks翻墙服务器">
+                <i class="fa fa-chevron-left"></i> 搭建自己的Shadowsocks翻墙服务器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/20/百度地图使用-自定义大头针/"
+           data-title="百度地图使用-自定义大头针" data-url="http://yoursite.com/2016/07/20/百度地图使用-自定义大头针/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://img4.imgtn.bdimg.com/it/u=100108594,3121798740&fm=21&gp=0.jpg"
+               alt="刘爽" />
+          <p class="site-author-name" itemprop="name">刘爽</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.cocoachina.com" title="CocoaChina" target="_blank">CocoaChina</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" title="Git教程" target="_blank">Git教程</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.callmewhy.com" title="Why" target="_blank">Why</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘爽</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feelShuang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
