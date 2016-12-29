@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="添加空模板," />
+  <meta name="keywords" content="IP," />
 
 
 
@@ -84,19 +84,88 @@
 
 
 
-<meta name="description" content="在Xcode中模板位置：
-Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ Developer ▸ Platforms ▸ iPhoneOS.platform ▸ Developer ▸ Library ▸ Xcode ▸ Templates ▸ Project Templates ▸ Application ▸ Empty Applicat">
+<meta name="description" content="获取iOS设备接入网络的IP地址，个人热点只有在设备连接的时候才会生成bridge100的IP地址，如果只是把个人热点打开，没有设备连接的话是不会检测到bridge100网段的
+
+遍历设备所有网卡，可以找到对应的IP地址。相关参数介绍
+
+
+
+ifa_name
+IP段
+IP地址
+
+
+
+
+lo0
+本地IP
+127.0.0.1
+
+
+en0
+局域网IP
+192.168.1.23
+
+
+pdp_ip0
+WW">
 <meta property="og:type" content="article">
-<meta property="og:title" content="给Xcode添加空模板">
-<meta property="og:url" content="http://yoursite.com/2015/09/26/给Xcode添加空模板/index.html">
+<meta property="og:title" content="iOS下获取设备所有实体网卡/虚拟网络IP">
+<meta property="og:url" content="http://yoursite.com/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/index.html">
 <meta property="og:site_name" content="刘 爽">
-<meta property="og:description" content="在Xcode中模板位置：
-Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ Developer ▸ Platforms ▸ iPhoneOS.platform ▸ Developer ▸ Library ▸ Xcode ▸ Templates ▸ Project Templates ▸ Application ▸ Empty Applicat">
-<meta property="og:updated_time" content="2015-12-26T14:02:09.000Z">
+<meta property="og:description" content="获取iOS设备接入网络的IP地址，个人热点只有在设备连接的时候才会生成bridge100的IP地址，如果只是把个人热点打开，没有设备连接的话是不会检测到bridge100网段的
+
+遍历设备所有网卡，可以找到对应的IP地址。相关参数介绍
+
+
+
+ifa_name
+IP段
+IP地址
+
+
+
+
+lo0
+本地IP
+127.0.0.1
+
+
+en0
+局域网IP
+192.168.1.23
+
+
+pdp_ip0
+WW">
+<meta property="og:updated_time" content="2016-12-29T07:55:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="给Xcode添加空模板">
-<meta name="twitter:description" content="在Xcode中模板位置：
-Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ Developer ▸ Platforms ▸ iPhoneOS.platform ▸ Developer ▸ Library ▸ Xcode ▸ Templates ▸ Project Templates ▸ Application ▸ Empty Applicat">
+<meta name="twitter:title" content="iOS下获取设备所有实体网卡/虚拟网络IP">
+<meta name="twitter:description" content="获取iOS设备接入网络的IP地址，个人热点只有在设备连接的时候才会生成bridge100的IP地址，如果只是把个人热点打开，没有设备连接的话是不会检测到bridge100网段的
+
+遍历设备所有网卡，可以找到对应的IP地址。相关参数介绍
+
+
+
+ifa_name
+IP段
+IP地址
+
+
+
+
+lo0
+本地IP
+127.0.0.1
+
+
+en0
+局域网IP
+192.168.1.23
+
+
+pdp_ip0
+WW">
 
 
 
@@ -124,13 +193,13 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2015/09/26/给Xcode添加空模板/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/"/>
 
 
 
 
 
-  <title> 给Xcode添加空模板 | 刘 爽 </title>
+  <title> iOS下获取设备所有实体网卡/虚拟网络IP | 刘 爽 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -291,7 +360,7 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/26/给Xcode添加空模板/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="刘爽">
@@ -315,7 +384,7 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
             
             
               
-                给Xcode添加空模板
+                iOS下获取设备所有实体网卡/虚拟网络IP
               
             
           </h1>
@@ -328,8 +397,8 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-26T22:00:15+08:00">
-                2015-09-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-29T22:44:23+08:00">
+                2016-12-29
               </time>
             
 
@@ -362,8 +431,8 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="/2015/09/26/给Xcode添加空模板/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/26/给Xcode添加空模板/" itemprop="commentCount"></span>
+                <a href="/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -389,10 +458,116 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
       
 
       
-        <p>在Xcode中模板位置：</p>
-<p>Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ Developer ▸ Platforms ▸ iPhoneOS.platform ▸ Developer ▸ Library ▸ Xcode ▸ Templates ▸ Project Templates ▸ Application ▸ Empty Application.xctemplate</p>
-<p>因为Xcode5.1.1或低于该版本的部分Xcode都有空模板,拷贝其中的空模板，粘贴到Xcode6或所需要Xcode上方路径中。</p>
+        <blockquote>
+<p>获取iOS设备接入网络的IP地址，个人热点只有在设备连接的时候才会生成bridge100的IP地址，如果只是把个人热点打开，没有设备连接的话是不会检测到bridge100网段的</p>
+</blockquote>
+<p>遍历设备所有网卡，可以找到对应的IP地址。相关参数介绍</p>
+<table>
+<thead>
+<tr>
+<th>ifa_name</th>
+<th>IP段</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lo0</td>
+<td>本地IP</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>en0</td>
+<td>局域网IP</td>
+<td>192.168.1.23</td>
+</tr>
+<tr>
+<td>pdp_ip0</td>
+<td>WWAN地址</td>
+<td>–</td>
+</tr>
+<tr>
+<td>bridge100</td>
+<td>桥接、热点IP</td>
+<td>172.20.10.1</td>
+</tr>
+</tbody>
+</table>
+<pre><code>#import &quot;GetIPAddress.h&quot;
+#import &quot;NetAddress.h&quot;
+#import &lt;ifaddrs.h&gt;
+#import &lt;arpa/inet.h&gt;
+#import &lt;net/if.h&gt;
 
+@interface GetIPAddress ()
+
+@end
+
+@implementation GetIPAddress
+
+#pragma mark - 获取设备当前网络IP地址
+- (NSDictionary *)getIPAddress:(NSDictionary *)paramDict {
+
+    NSMutableDictionary *address = [[NSMutableDictionary alloc] init];
+    NSDictionary *addresses = [self getIPAddresses];
+
+    NetAddress *netAddr = [[NetAddress alloc] init];
+    for (NSString *key in addresses.allKeys) {
+        netAddr = addresses[key];
+        if ([key containsString:@&quot;en&quot;]) { // 局域网
+            [address setValue:netAddr.address forKey:@&quot;wifi&quot;];
+        } else if ([key containsString:@&quot;pdp_ip&quot;]) { // WAN
+            [address setValue:netAddr.address forKey:@&quot;wan&quot;];
+        } else if ([key containsString:@&quot;bridge&quot;]) { // 本机热点
+            [address setValue:netAddr.address forKey:@&quot;hot&quot;];
+        }
+    }
+    return address ? address : nil;
+}
+
+
+- (NSDictionary *)getIPAddresses {
+    NSMutableDictionary* addresses = [[NSMutableDictionary alloc] init];
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+
+    @try {
+        // retrieve the current interfaces - returns 0 on success
+        NSInteger success = getifaddrs(&amp;interfaces);
+        //NSLog(@&quot;%@, success=%d&quot;, NSStringFromSelector(_cmd), success);
+        if (success == 0) {
+            // Loop through linked list of interfaces
+            temp_addr = interfaces;
+            while(temp_addr != NULL) {
+                if(temp_addr-&gt;ifa_addr-&gt;sa_family == AF_INET) {
+                    // Get NSString from C String
+                    NSString* ifaName = [NSString stringWithUTF8String:temp_addr-&gt;ifa_name];
+                    NSString* address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_addr)-&gt;sin_addr)];
+                    NSString* mask = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_netmask)-&gt;sin_addr)];
+                    NSString* gateway = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_dstaddr)-&gt;sin_addr)];
+
+
+                    NetAddress* netAddress = [[NetAddress alloc] init];
+                    netAddress.name = ifaName;
+                    netAddress.address = address;
+                    netAddress.netmask = mask;
+                    netAddress.gateway = gateway;
+                    addresses[ifaName] = netAddress;
+                }
+                temp_addr = temp_addr-&gt;ifa_next;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@&quot;Exception: %@&quot;, exception);
+    }
+    @finally {
+        // Free memory
+        freeifaddrs(interfaces);
+    }
+    return addresses;
+}
+</code></pre>
       
     </div>
 
@@ -415,7 +590,7 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
       
         <div class="post-tags">
           
-            <a href="/tags/添加空模板/" rel="tag"># 添加空模板</a>
+            <a href="/tags/IP/" rel="tag"># IP</a>
           
         </div>
       
@@ -424,8 +599,8 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/09/03/FMDB数据库第三方框架/" rel="next" title="FMDB数据库第三方框架">
-                <i class="fa fa-chevron-left"></i> FMDB数据库第三方框架
+              <a href="/2016/07/20/百度地图使用-自定义大头针/" rel="next" title="百度地图使用-自定义大头针">
+                <i class="fa fa-chevron-left"></i> 百度地图使用-自定义大头针
               </a>
             
           </div>
@@ -433,10 +608,6 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/10/04/UITableView下移问题/" rel="prev" title="UITableView下移问题">
-                UITableView下移问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -462,8 +633,8 @@ Macintosh HD ▸ 应用程序 ▸ Xcode(低于版本6的).app ▸ Contents ▸ D
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/09/26/给Xcode添加空模板/"
-           data-title="给Xcode添加空模板" data-url="http://yoursite.com/2015/09/26/给Xcode添加空模板/">
+      <div class="ds-thread" data-thread-key="2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/"
+           data-title="iOS下获取设备所有实体网卡/虚拟网络IP" data-url="http://yoursite.com/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/">
       </div>
     
   </div>
