@@ -388,8 +388,7 @@
 
       
         
-          
-            <blockquote>
+          <blockquote>
 <p>获取iOS设备接入网络的IP地址，个人热点只有在设备连接的时候才会生成bridge100的IP地址，如果只是把个人热点打开，没有设备连接的话是不会检测到bridge100网段的</p>
 </blockquote>
 <p>遍历设备所有网卡，可以找到对应的IP地址。相关参数介绍</p>
@@ -424,82 +423,13 @@
 </tr>
 </tbody>
 </table>
-<pre><code>#import &quot;GetIPAddress.h&quot;
-#import &quot;NetAddress.h&quot;
-#import &lt;ifaddrs.h&gt;
-#import &lt;arpa/inet.h&gt;
-#import &lt;net/if.h&gt;
-
-@interface GetIPAddress ()
-
-@end
-
-@implementation GetIPAddress
-
-#pragma mark - 获取设备当前网络IP地址
-- (NSDictionary *)getIPAddress:(NSDictionary *)paramDict {
-
-    NSMutableDictionary *address = [[NSMutableDictionary alloc] init];
-    NSDictionary *addresses = [self getIPAddresses];
-
-    NetAddress *netAddr = [[NetAddress alloc] init];
-    for (NSString *key in addresses.allKeys) {
-        netAddr = addresses[key];
-        if ([key containsString:@&quot;en&quot;]) { // 局域网
-            [address setValue:netAddr.address forKey:@&quot;wifi&quot;];
-        } else if ([key containsString:@&quot;pdp_ip&quot;]) { // WAN
-            [address setValue:netAddr.address forKey:@&quot;wan&quot;];
-        } else if ([key containsString:@&quot;bridge&quot;]) { // 本机热点
-            [address setValue:netAddr.address forKey:@&quot;hot&quot;];
-        }
-    }
-    return address ? address : nil;
-}
-
-
-- (NSDictionary *)getIPAddresses {
-    NSMutableDictionary* addresses = [[NSMutableDictionary alloc] init];
-    struct ifaddrs *interfaces = NULL;
-    struct ifaddrs *temp_addr = NULL;
-
-    @try {
-        // retrieve the current interfaces - returns 0 on success
-        NSInteger success = getifaddrs(&amp;interfaces);
-        //NSLog(@&quot;%@, success=%d&quot;, NSStringFromSelector(_cmd), success);
-        if (success == 0) {
-            // Loop through linked list of interfaces
-            temp_addr = interfaces;
-            while(temp_addr != NULL) {
-                if(temp_addr-&gt;ifa_addr-&gt;sa_family == AF_INET) {
-                    // Get NSString from C String
-                    NSString* ifaName = [NSString stringWithUTF8String:temp_addr-&gt;ifa_name];
-                    NSString* address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_addr)-&gt;sin_addr)];
-                    NSString* mask = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_netmask)-&gt;sin_addr)];
-                    NSString* gateway = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *) temp_addr-&gt;ifa_dstaddr)-&gt;sin_addr)];
-
-
-                    NetAddress* netAddress = [[NetAddress alloc] init];
-                    netAddress.name = ifaName;
-                    netAddress.address = address;
-                    netAddress.netmask = mask;
-                    netAddress.gateway = gateway;
-                    addresses[ifaName] = netAddress;
-                }
-                temp_addr = temp_addr-&gt;ifa_next;
-            }
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@&quot;Exception: %@&quot;, exception);
-    }
-    @finally {
-        // Free memory
-        freeifaddrs(interfaces);
-    }
-    return addresses;
-}
-</code></pre>
-          
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/12/29/iOS下获取设备所有实体网卡:虚拟网络IP/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1936,11 +1866,7 @@
             <ul class="links-of-blogroll-list">
               
                 <li class="links-of-blogroll-item">
-                  <a href="http://www.github.com/" title="Github" target="_blank">Github</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.cocoachina.com" title="CocoaChina" target="_blank">CocoaChina</a>
+                  <a href="https://onevcat.com/#blog" title="Onevcat" target="_blank">Onevcat</a>
                 </li>
               
                 <li class="links-of-blogroll-item">
@@ -1949,6 +1875,14 @@
               
                 <li class="links-of-blogroll-item">
                   <a href="http://blog.callmewhy.com" title="Why" target="_blank">Why</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.lidaze.com/" title="LiDaZe" target="_blank">LiDaZe</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ilakeyc.gift/" title="iLakeYC" target="_blank">iLakeYC</a>
                 </li>
               
             </ul>
@@ -1975,7 +1909,7 @@
         <div class="copyright" >
   
   &copy;  2014 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-"></i>
   </span>
